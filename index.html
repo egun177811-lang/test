@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 공항 항공편 정보</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary-dark': 'rgba(4, 40, 63, 1)',
+            'primary-teal': 'rgba(0, 91, 82, 1)',
+            'secondary-green': 'rgba(158, 193, 49, 1)',
+            'accent-lime': 'rgba(219, 242, 38, 1)',
+            'neutral-beige': 'rgba(214, 212, 142, 1)'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-neutral-beige min-h-screen">
+  <!-- Header Navigation -->
+  <header class="bg-primary-dark text-white shadow-lg" role="banner">
+    <nav class="container mx-auto px-4 py-4" role="navigation" aria-label="메인 네비게이션">
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-bold">✈️ AI 공항 정보</h1>
+        <div class="hidden md:flex space-x-6">
+          <a href="#hero" class="hover:text-accent-lime transition-colors" aria-label="홈으로 이동">홈</a>
+          <a href="#flight-board" class="hover:text-accent-lime transition-colors" aria-label="항공편 정보로 이동">항공편</a>
+          <a href="#gate-info" class="hover:text-accent-lime transition-colors" aria-label="게이트 정보로 이동">게이트</a>
+          <a href="#services" class="hover:text-accent-lime transition-colors" aria-label="서비스 정보로 이동">서비스</a>
+        </div>
+        <button class="md:hidden text-white" aria-label="메뉴 열기">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main role="main">
+    <!-- Hero Section -->
+    <section id="hero" class="bg-gradient-to-r from-primary-dark to-primary-teal text-white py-16" aria-labelledby="hero-title">
+      <div class="container mx-auto px-4 text-center">
+        <h2 id="hero-title" class="text-4xl md:text-6xl font-bold mb-6">실시간 항공편 정보</h2>
+        <p class="text-xl mb-8 opacity-90">AI 기반 정확한 게이트 및 시간 정보를 확인하세요</p>
+        
+        <!-- Search Form -->
+        <div class="max-w-2xl mx-auto">
+          <form class="flex flex-col md:flex-row gap-4" role="search" aria-label="항공편 검색">
+            <input 
+              type="text" 
+              id="flight-search"
+              placeholder="편명 또는 목적지 검색 (예: KE123, 도쿄)"
+              class="flex-1 px-4 py-3 rounded-lg text-primary-dark placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-accent-lime"
+              aria-label="항공편 검색 입력"
+            >
+            <button 
+              type="submit"
+              class="bg-primary-teal hover:bg-opacity-90 px-8 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+              aria-label="검색 실행"
+            >
+              검색
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Flight Board Section -->
+    <section id="flight-board" class="py-16" aria-labelledby="flight-board-title">
+      <div class="container mx-auto px-4">
+        <h2 id="flight-board-title" class="text-3xl font-bold text-primary-dark mb-8 text-center">항공편 정보</h2>
+        
+        <!-- Filter Controls -->
+        <div class="flex flex-wrap justify-center gap-4 mb-8">
+          <button class="filter-btn active bg-primary-teal text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors" data-status="all" aria-label="전체 항공편 보기">
+            전체
+          </button>
+          <button class="filter-btn bg-secondary-green text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors" data-status="정시" aria-label="정시 항공편만 보기">
+            정시
+          </button>
+          <button class="filter-btn bg-accent-lime text-primary-dark px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors" data-status="지연" aria-label="지연 항공편만 보기">
+            지연
+          </button>
+          <button class="filter-btn bg-red-500 text-white px-6 py-2 rounded-full hover:bg-opacity-90 transition-colors" data-status="취소" aria-label="취소된 항공편만 보기">
+            취소
+          </button>
+        </div>
+
+        <!-- Flight List -->
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3" id="flight-list" role="list" aria-label="항공편 목록">
+          <!-- Flight cards will be populated by JavaScript -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Gate Info Section -->
+    <section id="gate-info" class="bg-white py-16" aria-labelledby="gate-info-title">
+      <div class="container mx-auto px-4">
+        <h2 id="gate-info-title" class="text-3xl font-bold text-primary-dark mb-8 text-center">게이트 상세 정보</h2>
+        
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="bg-neutral-beige p-6 rounded-lg">
+            <h3 class="text-xl font-semibold text-primary-dark mb-4">게이트 A (국내선)</h3>
+            <div class="space-y-2">
+              <p><span class="font-medium">A1-A10:</span> 소형 항공기</p>
+              <p><span class="font-medium">A11-A20:</span> 중형 항공기</p>
+              <p><span class="font-medium">A21-A30:</span> 대형 항공기</p>
+            </div>
+          </div>
+          
+          <div class="bg-neutral-beige p-6 rounded-lg">
+            <h3 class="text-xl font-semibold text-primary-dark mb-4">게이트 B (국제선)</h3>
+            <div class="space-y-2">
+              <p><span class="font-medium">B1-B15:</span> 아시아 노선</p>
+              <p><span class="font-medium">B16-B25:</span> 유럽/미국 노선</p>
+              <p><span class="font-medium">B26-B35:</span> 기타 국제선</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-16" aria-labelledby="services-title">
+      <div class="container mx-auto px-4">
+        <h2 id="services-title" class="text-3xl font-bold text-primary-dark mb-8 text-center">공항 서비스</h2>
+        
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+            <div class="text-4xl mb-4">🛍️</div>
+            <h3 class="text-xl font-semibold text-primary-dark mb-2">면세점</h3>
+            <p class="text-gray-600">24시간 운영</p>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+            <div class="text-4xl mb-4">🍽️</div>
+            <h3 class="text-xl font-semibold text-primary-dark mb-2">식당</h3>
+            <p class="text-gray-600">다양한 메뉴 제공</p>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+            <div class="text-4xl mb-4">🚗</div>
+            <h3 class="text-xl font-semibold text-primary-dark mb-2">주차장</h3>
+            <p class="text-gray-600">장기/단기 주차 가능</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-primary-dark text-white py-8" role="contentinfo">
+    <div class="container mx-auto px-4 text-center">
+      <p>&copy; 2026 AI 공항 정보. 모든 권리 보유.</p>
+      <p class="mt-2 text-sm opacity-75">문의: info@aiairport.com | 전화: 1588-0000</p>
+    </div>
+  </footer>
+
+  <script>
+    // Sample flight data
+    const flightData = [
+      {
+        flightNumber: "KE123",
+        airline: "대한항공",
+        departure: { city: "서울", time: "14:30", gate: "A12" },
+        arrival: { city: "도쿄", time: "17:45", gate: "B7" },
+        status: "정시"
+      },
+      {
+        flightNumber: "OZ456",
+        airline: "아시아나항공",
+        departure: { city: "서울", time: "15:15", gate: "A15" },
+        arrival: { city: "상하이", time: "16:30", gate: "B12" },
+        status: "지연"
+      },
+      {
+        flightNumber: "7C789",
+        airline: "제주항공",
+        departure: { city: "서울", time: "16:00", gate: "A8" },
+        arrival: { city: "제주", time: "17:15", gate: "A20" },
+        status: "정시"
+      },
+      {
+        flightNumber: "TW234",
+        airline: "티웨이항공",
+        departure: { city: "서울", time: "17:30", gate: "A5" },
+        arrival: { city: "부산", time: "18:45", gate: "A18" },
+        status: "취소"
+      },
+      {
+        flightNumber: "KE567",
+        airline: "대한항공",
+        departure: { city: "서울", time: "18:00", gate: "B3" },
+        arrival: { city: "뉴욕", time: "06:00+1", gate: "B25" },
+        status: "탑승중"
+      },
+      {
+        flightNumber: "OZ890",
+        airline: "아시아나항공",
+        departure: { city: "서울", time: "19:15", gate: "B8" },
+        arrival: { city: "런던", time: "11:30+1", gate: "B22" },
+        status: "정시"
+      }
+    ];
+
+    // DOM elements
+    const flightList = document.getElementById('flight-list');
+    const searchInput = document.getElementById('flight-search');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    // Status color mapping
+    const statusColors = {
+      '정시': 'bg-secondary-green',
+      '지연': 'bg-accent-lime text-primary-dark',
+      '취소': 'bg-red-500',
+      '탑승중': 'bg-blue-500'
+    };
+
+    // Render flight cards
+    function renderFlights(flights) {
+      flightList.innerHTML = '';
+      
+      flights.forEach(flight => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow';
+        card.setAttribute('role', 'listitem');
+        
+        card.innerHTML = `
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <h3 class="text-xl font-bold text-primary-dark">${flight.flightNumber}</h3>
+              <p class="text-gray-600">${flight.airline}</p>
+            </div>
+            <span class="px-3 py-1 rounded-full text-sm font-medium ${statusColors[flight.status]}">
+              ${flight.status}
+            </span>
+          </div>
+          
+          <div class="space-y-2">
+            <div class="flex justify-between">
+              <span class="font-medium">출발:</span>
+              <span>${flight.departure.city} ${flight.departure.time}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="font-medium">도착:</span>
+              <span>${flight.arrival.city} ${flight.arrival.time}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="font-medium">게이트:</span>
+              <span>${flight.departure.gate} → ${flight.arrival.gate}</span>
+            </div>
+          </div>
+        `;
+        
+        flightList.appendChild(card);
+      });
+    }
+
+    // Filter flights by status
+    function filterFlights(status) {
+      const filtered = status === 'all' 
+        ? flightData 
+        : flightData.filter(flight => flight.status === status);
+      renderFlights(filtered);
+    }
+
+    // Search flights
+    function searchFlights(query) {
+      const filtered = flightData.filter(flight => 
+        flight.flightNumber.toLowerCase().includes(query.toLowerCase()) ||
+        flight.airline.toLowerCase().includes(query.toLowerCase()) ||
+        flight.departure.city.toLowerCase().includes(query.toLowerCase()) ||
+        flight.arrival.city.toLowerCase().includes(query.toLowerCase())
+      );
+      renderFlights(filtered);
+    }
+
+    // Event listeners
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Remove active class from all buttons
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        // Add active class to clicked button
+        button.classList.add('active');
+        
+        const status = button.dataset.status;
+        filterFlights(status);
+      });
+    });
+
+    // Search form submission
+    document.querySelector('form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const query = searchInput.value.trim();
+      if (query) {
+        searchFlights(query);
+      } else {
+        filterFlights('all');
+      }
+    });
+
+    // Real-time search
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.trim();
+      if (query) {
+        searchFlights(query);
+      } else {
+        filterFlights('all');
+      }
+    });
+
+    // Initialize
+    renderFlights(flightData);
+
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

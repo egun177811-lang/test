@@ -1,0 +1,71 @@
+# AI 공항 항공편 정보 페이지 - Project Rules
+
+## 프로젝트 개요
+- **목적**: AI 기반 공항 항공편 게이트 및 시간 정보를 제공하는 웹 페이지
+- **배포**: GitHub Pages 또는 정적 호스팅
+- **구조**: 단순한 단일 폴더 구조
+
+**중요사항**
+- Git 관리 규칙
+  - **Git 명령어는 Github mcp 를 사용해서 수행합니다**
+- 테스트 규칙
+  - **puppeteer mcp 를 사용해서 브라우저 상에서 다양한 테스트를 수행합니다**
+
+## 기술 스택
+- HTML5
+- CSS3
+- Vanilla JavaScript
+- Tailwind.css 사용
+
+## 페이지 구조
+```html
+<header>네비게이션</header>
+<main>
+    <section id="hero">메인 타이틀/검색</section>
+    <section id="flight-board">항공편 정보</section>
+    <section id="gate-info">게이트 상세</section>
+    <section id="services">공항 서비스</section>
+</main>
+<footer>저작권/연락처</footer>
+```
+
+## 컬러 시스템
+```css
+:root {
+    --primary-dark: rgba(4, 40, 63, 1);      /* 네이비: 헤더, 메인 텍스트 */
+    --primary-teal: rgba(0, 91, 82, 1);      /* 틸: 버튼, 액센트 */
+    --secondary-green: rgba(158, 193, 49, 1); /* 그린: 정시 상태 */
+    --accent-lime: rgba(219, 242, 38, 1);    /* 라임: 지연 알림 */
+    --neutral-beige: rgba(214, 212, 142, 1); /* 베이지: 배경, 카드 */
+}
+```
+**중요사항**
+- 반응형 디자인 지원 필수
+
+## 코딩 스타일
+- **HTML**: 시맨틱 태그, 2칸 들여쓰기, ARIA 레이블
+- **CSS**: BEM 방법론, CSS 변수 사용, 모바일 퍼스트
+- **JS**: camelCase, async/await, const/let 사용
+
+## 필수 기능
+1. 항공편 정보 표시 (편명, 게이트, 시간, 상태)
+2. 검색/필터링 (편명, 출발지, 상태별)
+3. 반응형 디자인
+4. 접근성 지원
+
+## 데이터 형식
+```javascript
+{
+    "flightNumber": "KE123",
+    "airline": "대한항공",
+    "departure": {"city": "서울", "time": "14:30", "gate": "A12"},
+    "arrival": {"city": "도쿄", "time": "17:45", "gate": "B7"},
+    "status": "정시|지연|취소|탑승중"
+}
+```
+
+## 품질 기준
+- W3C 검증 통과
+- 모바일 친화적
+- 크로스 브라우저 호환
+- 접근성 AA 등급
